@@ -73,6 +73,7 @@ public void displayLosingMessage() {
 	for (int i = 0; i < buttons.length; i++) {
 		for (int j = 0; j < buttons[i].length; j++) {
 			buttons[i][j] = new MSButton(i, j);
+			buttons[i][j].clicked = true;
 		}
 	}
 
