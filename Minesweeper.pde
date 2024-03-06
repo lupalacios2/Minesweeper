@@ -6,7 +6,6 @@ private static final int NUM_MINES = 15;
 
 private MSButton[][] buttons;
 private ArrayList <MSButton> mines = new ArrayList <MSButton> ();
-private boolean gameOver = false;
 
 void setup () {
 	size(400, 400);
@@ -40,11 +39,6 @@ public void setMines() {
 public void draw () {
 	background( 0 );
 
-	if (gameOver) {
-		displayLosingMessage();
-		return;
-	}
-
 	if (isWon()) {
 		displayWinningMessage();
 		return;
@@ -57,7 +51,7 @@ public boolean isWon() {
 			if (mines.contains(buttons[i][j]) && !buttons[i][j].isFlagged()) {
 				return false;
 			}
-			if (!mines.contains(buttons[i][j]) && !buttons[i][j].clicked) {
+		if (!mines.contains(buttons[i][j]) && !buttons[i][j].clicked) {
 				return false;
 			}
 		}
@@ -69,34 +63,22 @@ public boolean isWon() {
 public void displayLosingMessage() {
 	String arr = {"Y", "o", "u", " ", "L", "o", "s", "t", "!"};
 
-	buttons = new MSButton[NUM_ROWS][NUM_COLS];
-	for (int i = 0; i < buttons.length; i++) {
-		for (int j = 0; j < buttons[i].length; j++) {
-			buttons[i][j] = new MSButton(i, j);
-			buttons[i][j].clicked = true;
-		}
+	for (int i = 0; i < mines.size(); i++) {
+		mines.get(i).revealMine();
 	}
-
-	for (int k = 0; k < arr.length; k++) {
-		buttons[0][k].setLabel(arr[k]);
-	}
-
-	gameOver = true;
+	
+	noLoop();
 }
 
 public void displayWinningMessage() {
 	String arr = {"Y", "o", "u", " ", "W", "o", "n", "!"};
 
 	buttons = new MSButton[NUM_ROWS][NUM_COLS];
-	for (int i = 0; i < buttons.length; i++) {
-		for (int j = 0; j < buttons[i].length; j++) {
-			buttons[i][j] = new MSButton(i, j);
-		}
+	for (int i = 0; i < mines.size(); i++) {
+		mines.get(i).revealMine();
 	}
 
-	for (int k = 0; k < arr.length; k++) {
-		buttons[0][k].setLabel(arr[k]);
-	}
+	noLoop();
 }
 
 public boolean isValid(int r, int c) {
@@ -178,6 +160,13 @@ public class MSButton {
 			fill(100);
 		}
 
+		rect(x, y, width, height);
+		fill(0);
+		text(myLabel, x+width/2, y+height/2);
+	}
+
+	public void revealMine() {
+		fill(255, 0, 0);
 		rect(x, y, width, height);
 		fill(0);
 		text(myLabel, x+width/2, y+height/2);
